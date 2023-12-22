@@ -11,10 +11,10 @@ E: meta-variscite-bsp-imx : provided a fixed version fron Stonehex repo ( this )
 
 ## Quick instructions:
 
-1: clone buildroot : <b>git clone https://github.com/buildroot/buildroot.git</b><br>
+1: clone buildroot : <b>git clone https://github.com/buildroot/buildroot.git</b> or <b>git clone https://github.com/StoneHEX/buildroot-2023.08.4</b><br>
 2: download <b>reventon_var_br-2023.08.4_001.patch</b> from here :<br>**** https://github.com/StoneHEX/SthRevVar_i.mx8m_1.0.0/blob/master/reventon_var_br-2023.08.4_001.patch ****<br>
 3: rename buildroot obtained directory in step 1 with the name you like and enter it<br>
-4: checkout branch 2023.08.4 : <b>git checkout 2023.08.4</b><br>
+4: if you cloned the original buildroot checkout branch 2023.08.4 : <b>git checkout 2023.08.4</b><br>
 5: apply patch with <b>patch -p1 < ../reventon_var_br-2023.08.4_001.patch</b><br>
 6: configure with <b>make var_reventon_i.mx8m_sth_defconfig</b><br>
 7: make with <b>make</b><br>
