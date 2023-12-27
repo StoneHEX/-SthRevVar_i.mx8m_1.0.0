@@ -16,7 +16,7 @@ E: meta-variscite-bsp-imx : provided a fixed version fron Stonehex repo ( this )
 3: rename buildroot obtained directory in step 1 with the name you like and enter it<br>
 4: if you cloned the original buildroot checkout branch 2023.08.4 : <b>git checkout 2023.08.4</b><br>
 5: apply patch with <b>patch -p1 < ../reventon_var_br-2023.08.4_001.patch</b><br>
-6: configure with <b>make var_reventon_i.mx8m_sth_defconfig</b><br>
+6: configure with <br>text only version : <b>make var_reventon_i.mx8m_sth_defconfig</b><br>graphic support : <b>make var_reventon_graphic_i.mx8m_sth_defconfig</b><br>
 7: make with <b>make</b><br>
 ### WARNING : check your device is /dev/sdb , mksd.sh defaults to it so change it if different !!!
 ### WARNING : selecting the wrong device can destroy your hard disk
