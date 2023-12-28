@@ -14290,7 +14290,7 @@ index 0000000000..44eab99530
 +# BR2_TARGET_UBOOT_NETWORK is not set
 diff --git a/configs/var_reventon_graphic_i.mx8m_sth_defconfig b/configs/var_reventon_graphic_i.mx8m_sth_defconfig
 new file mode 100644
-index 0000000000..8d7d5276e9
+index 0000000000..3f8506d057
 --- /dev/null
 +++ b/configs/var_reventon_graphic_i.mx8m_sth_defconfig
 @@ -0,0 +1,4177 @@
@@ -15285,12 +15285,12 @@ index 0000000000..8d7d5276e9
 +# tekui needs a Lua interpreter and a toolchain w/ threads, dynamic library
 +#
 +BR2_PACKAGE_WESTON=y
-+# BR2_PACKAGE_WESTON_DEFAULT_DRM is not set
++BR2_PACKAGE_WESTON_DEFAULT_DRM=y
 +# BR2_PACKAGE_WESTON_DEFAULT_HEADLESS is not set
 +# BR2_PACKAGE_WESTON_DEFAULT_RDP is not set
 +# BR2_PACKAGE_WESTON_DEFAULT_WAYLAND is not set
-+BR2_PACKAGE_WESTON_DEFAULT_X11=y
-+BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR="x11"
++# BR2_PACKAGE_WESTON_DEFAULT_X11 is not set
++BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR="drm"
 +BR2_PACKAGE_WESTON_DRM=y
 +# BR2_PACKAGE_WESTON_RDP is not set
 +# BR2_PACKAGE_WESTON_HEADLESS is not set
