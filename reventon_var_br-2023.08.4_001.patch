@@ -14290,13 +14290,13 @@ index 0000000000..44eab99530
 +# BR2_TARGET_UBOOT_NETWORK is not set
 diff --git a/configs/var_reventon_graphic_i.mx8m_sth_defconfig b/configs/var_reventon_graphic_i.mx8m_sth_defconfig
 new file mode 100644
-index 0000000000..3f8506d057
+index 0000000000..58d1315e02
 --- /dev/null
 +++ b/configs/var_reventon_graphic_i.mx8m_sth_defconfig
 @@ -0,0 +1,4177 @@
 +#
 +# Automatically generated file; DO NOT EDIT.
-+# Buildroot 2023.08.4 Configuration
++# Buildroot 2023.08.4-dirty Configuration
 +#
 +BR2_HAVE_DOT_CONFIG=y
 +BR2_HOST_GCC_AT_LEAST_4_9=y
@@ -14645,7 +14645,7 @@ index 0000000000..3f8506d057
 +BR2_XZCAT="xzcat"
 +BR2_LZCAT="lzip -d -c"
 +BR2_TAR_OPTIONS=""
-+BR2_DEFCONFIG="/Devel/buildroot/buildroot-2023.08.3/configs/freescale_imx8mmevk_defconfig"
++BR2_DEFCONFIG="/Devel/buildroot/buildroot-2023.08.3/configs/var_reventon_graphic_i.mx8m_sth_defconfig"
 +BR2_DL_DIR="/Devel/buildroot/Downloads"
 +BR2_HOST_DIR="$(BASE_DIR)/host"
 +
@@ -14753,9 +14753,9 @@ index 0000000000..3f8506d057
 +# BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200 is not set
 +BR2_TARGET_GENERIC_GETTY_BAUDRATE="0"
 +BR2_TARGET_GENERIC_GETTY_TERM="vt100"
-+BR2_TARGET_GENERIC_GETTY_OPTIONS="-l /bin/autologin.sh -n "
++BR2_TARGET_GENERIC_GETTY_OPTIONS=""
 +BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW=y
-+BR2_SYSTEM_DHCP="eth0"
++BR2_SYSTEM_DHCP=""
 +BR2_SYSTEM_DEFAULT_PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 +BR2_ENABLE_LOCALE_PURGE=y
 +BR2_ENABLE_LOCALE_WHITELIST="C en_US"
@@ -14808,7 +14808,7 @@ index 0000000000..3f8506d057
 +BR2_LINUX_KERNEL_CUSTOM_DTS_PATH=""
 +# BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME is not set
 +# BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT is not set
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
++# BR2_LINUX_KERNEL_INSTALL_TARGET is not set
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 +# BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF is not set
 +# BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE is not set
@@ -15285,12 +15285,12 @@ index 0000000000..3f8506d057
 +# tekui needs a Lua interpreter and a toolchain w/ threads, dynamic library
 +#
 +BR2_PACKAGE_WESTON=y
-+BR2_PACKAGE_WESTON_DEFAULT_DRM=y
++# BR2_PACKAGE_WESTON_DEFAULT_DRM is not set
 +# BR2_PACKAGE_WESTON_DEFAULT_HEADLESS is not set
 +# BR2_PACKAGE_WESTON_DEFAULT_RDP is not set
 +# BR2_PACKAGE_WESTON_DEFAULT_WAYLAND is not set
-+# BR2_PACKAGE_WESTON_DEFAULT_X11 is not set
-+BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR="drm"
++BR2_PACKAGE_WESTON_DEFAULT_X11=y
++BR2_PACKAGE_WESTON_DEFAULT_COMPOSITOR="x11"
 +BR2_PACKAGE_WESTON_DRM=y
 +# BR2_PACKAGE_WESTON_RDP is not set
 +# BR2_PACKAGE_WESTON_HEADLESS is not set
@@ -17465,8 +17465,8 @@ index 0000000000..3f8506d057
 +# BR2_TARGET_ROOTFS_ROMFS is not set
 +# BR2_TARGET_ROOTFS_SQUASHFS is not set
 +BR2_TARGET_ROOTFS_TAR=y
-+BR2_TARGET_ROOTFS_TAR_NONE=y
-+# BR2_TARGET_ROOTFS_TAR_GZIP is not set
++# BR2_TARGET_ROOTFS_TAR_NONE is not set
++BR2_TARGET_ROOTFS_TAR_GZIP=y
 +# BR2_TARGET_ROOTFS_TAR_BZIP2 is not set
 +# BR2_TARGET_ROOTFS_TAR_LZ4 is not set
 +# BR2_TARGET_ROOTFS_TAR_LZMA is not set
@@ -22313,3 +22313,51 @@ index 0000000000..0fd763e2ba
 +# BR2_BINUTILS_VERSION_2_22 is not set
 +# BR2_PACKAGE_GPU_VIV_BIN_MX6Q is not set
 +# BR2_TARGET_UBOOT_NETWORK is not set
+diff --git a/mksd.sh b/mksd.sh
+new file mode 100755
+index 0000000000..596932a169
+--- /dev/null
++++ b/mksd.sh
+@@ -0,0 +1,42 @@
++#!/bin/sh
++
++populate_boot()
++{
++	cp output/images/sdcard.img .
++	sudo rm -rf tt
++	mkdir tt
++	sudo mount -o loop,offset=8388608 sdcard.img tt
++	echo "Copying file system"
++	sudo cp output/images/uInitrd tt/.
++	sudo mkdir tt/boot
++	echo "Copying boot.scr"
++	sudo cp output/images/boot.scr tt/boot/.
++	ls tt
++	ls tt/boot
++	sync
++	sudo umount tt
++	sudo fdisk sdcard.img<< __EOF__
++d
++2
++n
++p
++2
++147456
++
++t
++2
++b
++w
++__EOF__
++	sync
++	sleep 1
++}
++
++populate_boot
++
++echo "Writing sd"
++sudo dd if=sdcard.img of=/dev/sdb bs=1M status=progress
++sync
++echo y | sudo mkfs.vfat -F 16 /dev/sdb2 -n DATA 
++echo "Done"
++
